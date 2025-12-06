@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>BillionMind • Área Principal</title>
+
+<style>
+  body {
+    margin: 0;
+    font-family: system-ui, sans-serif;
+    background: #020308;
+    color: white;
+  }
+
+  header {
+    padding: 18px 22px;
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .logo {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #f4c86c;
+  }
+
+  .plan-badge {
+    padding: 6px 14px;
+    border-radius: 999px;
+    background: rgba(244,200,108,0.15);
+    border: 1px solid rgba(244,200,108,0.35);
+    font-size: 0.78rem;
+  }
+
+  .btn-logout {
+    padding: 8px 14px;
+    border-radius: 8px;
+    background: rgba(255,0,0,0.2);
+    border: 1px solid rgba(255,0,0,0.4);
+    color: #ff6b6b;
+    cursor: pointer;
+  }
+
+  .container {
+    padding: 26px;
+    max-width: 900px;
+    margin: auto;
+  }
+
+  h2 {
+    color: #f4c86c;
+    margin-bottom: 12px;
+  }
+
+  .feature {
+    padding: 20px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 14px;
+    margin-bottom: 14px;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .locked {
+    opacity: 0.4;
+    pointer-events: none;
+  }
+
+  .upgrade-box {
+    padding: 18px;
+    border-radius: 12px;
+    background: rgba(244,200,108,0.1);
+    border: 1px solid rgba(244,200,108,0.35);
+    margin-top: 20px;
+    text-align: center;
+  }
+
+  .btn-upgrade {
+    padding: 12px 24px;
+    border-radius: 999px;
+    background: linear-gradient(120deg, #f4c86c, #e1a93f);
+    color: #000;
+    cursor: pointer;
+    display: inline-block;
+    margin-top: 12px;
+  }
+
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">BillionMind</div>
+  <div id="planBadge" class="plan-badge">Carregando...</div>
+  <button class="btn-logout" onclick="logout()">Sair</button>
+</header>
+
+<div class="container">
+  <h2>Funções do Aplicativo</h2>
+
+  <div id="feature1" class="feature">
+    <strong>Ferramenta gratuita:</strong>
+    <p>Conteúdos básicos de mentalidade e primeiros passos.</p>
+  </div>
+
+  <div id="feature2" class="feature">
+    <strong>Criação de páginas com IA:</strong>
+    <p>Geração automática de estruturas profissionais.</p>
+  </div>
+
+  <div id="feature3" class="feature">
+    <strong>Sistema completo 2026+:</strong>
+    <p>Acesso total ao método, modelos e processos premium.</p>
+  </div>
+
+  <div id="upgradeBox" class="upgrade-box" style="display:none;">
+    <h3>Desbloqueie todo o poder do BillionMind</h3>
+    <p>Atualize seu plano para liberar todas as funções.</p>
+
+    <a href="https://pay.cakto.com.br/4ehcq2y_672236" target="_blank" class="btn-upgrade">
+      Atualizar para Premium
+    </a>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const supabase = supabase.createClient(
+    "https://lppjltjoxczooxsbtlyr.supabase.co",
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxwcGpsdGpveGN6b294c2J0bHlyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjUwNDY4MTUsImV4cCI6MjA4MDYyMjgxNX0.AK0i5gbTk12z6dgIrNYkFoi6LQMFocSxbi9lka-GZrc"
+  );
+
+  // Verifica usuário logado
+  async function loadUser() {
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+      window.location.href = "login.html";
+      return;
+    }
+
+    // Busca o plano do usuário no Supabase
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("plan")
+      .eq("id", user.id)
+      .single();
+
+    const plan = profile?.plan || "free";
+
+    document.getElementById("planBadge").textContent =
+      plan === "premium" ? "Plano PREMIUM" :
+      plan === "pro" ? "Plano PRO" :
+      "Plano FREE";
+
+    applyPlanRestrictions(plan);
+  }
+
+  // Limitações de plano
+  function applyPlanRestrictions(plan) {
+    const feature2 = document.getElementById("feature2");
+    const feature3 = document.getElementById("feature3");
+    const upgradeBox = document.getElementById("upgradeBox");
+
+    if (plan === "free") {
+      feature2.classList.add("locked");
+      feature3.classList.add("locked");
+      upgradeBox.style.display = "block";
+    }
+
+    if (plan === "pro") {
+      feature3.classList.add("locked");
+      upgradeBox.style.display = "block";
+    }
+
+    if (plan === "premium") {
+      upgradeBox.style.display = "none";
+    }
+  }
+
+  // Logout
+  async function logout() {
+    await supabase.auth.signOut();
+    window.location.href = "login.html";
+  }
+
+  loadUser();
+</script>
+
+</body>
+</html>
