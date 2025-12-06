@@ -1,212 +1,277 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BillionMind • Dashboard</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>BillionMind – Dashboard</title>
 
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: system-ui, sans-serif;
-      background: #05060a;
-      color: #ffffff;
-    }
+<style>
+  :root {
+    --black: #0a0a0c;
+    --panel: #111116;
+    --gold: #f4c86c;
+    --gold-soft: rgba(244, 200, 108, 0.2);
+    --text: #e4e4e4;
+    --text-soft: #9d9d9d;
+    --radius: 18px;
+    --shadow: 0 0 40px rgba(0, 0, 0, 0.65);
+  }
 
-    header {
-      padding: 16px;
-      background: #0b0d14;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+  body {
+    margin: 0;
+    background: var(--black);
+    color: var(--text);
+    font-family: system-ui, sans-serif;
+    overflow-x: hidden;
+  }
 
-    .plan-tag {
-      padding: 6px 12px;
-      background: #f4c86c;
-      color: #000;
-      border-radius: 20px;
-      font-weight: 600;
-      font-size: 0.9rem;
-    }
+  header {
+    padding: 22px 30px;
+    background: #000;
+    border-bottom: 1px solid var(--gold-soft);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
 
-    #logoutBtn {
-      padding: 8px 14px;
-      border-radius: 20px;
-      background: transparent;
-      color: #f4c86c;
-      border: 1px solid #f4c86c;
-      cursor: pointer;
-    }
+  .logo {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: var(--gold);
+    letter-spacing: 0.08em;
+  }
 
-    .locked {
-      opacity: 0.4;
-      filter: blur(3px);
-      pointer-events: none;
-    }
+  .plan-badge {
+    padding: 6px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--gold-soft);
+    background: rgba(255,255,255,0.05);
+    font-size: 0.82rem;
+    color: var(--gold);
+  }
 
-    /* CHAT */
-    .chat-box {
-      max-width: 900px;
-      margin: 40px auto;
-      padding: 20px;
-      background: #0c0d16;
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,0.1);
-    }
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 30px 20px;
+  }
 
-    textarea {
-      width: 100%;
-      height: 120px;
-      padding: 12px;
-      border-radius: 10px;
-      background: #11121f;
-      color: #fff;
-      border: 1px solid rgba(255,255,255,0.2);
-      resize: none;
-    }
+  .section {
+    background: var(--panel);
+    padding: 22px;
+    border-radius: var(--radius);
+    border: 1px solid rgba(255,255,255,0.05);
+    margin-bottom: 26px;
+    box-shadow: var(--shadow);
+  }
 
-    button.send {
-      margin-top: 10px;
-      width: 100%;
-      padding: 12px;
-      border: none;
-      border-radius: 10px;
-      background: linear-gradient(120deg, #f4c86c, #e1a93f);
-      color: #000;
-      font-weight: 700;
-      cursor: pointer;
-      font-size: 1rem;
-    }
+  .section h2 {
+    color: var(--gold);
+    margin-bottom: 12px;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
 
-    #response {
-      margin-top: 20px;
-      padding: 16px;
-      background: #10121f;
-      border-radius: 10px;
-      min-height: 80px;
-      white-space: pre-wrap;
-      border: 1px solid rgba(255,255,255,0.1);
-    }
-  </style>
+  /* CHAT */
+  .chat-box {
+    width: 100%;
+    height: 280px;
+    background: #000;
+    border-radius: var(--radius);
+    padding: 16px;
+    overflow-y: auto;
+    border: 1px solid var(--gold-soft);
+    margin-bottom: 14px;
+    font-size: 0.95rem;
+  }
+
+  .msg-user {
+    text-align: right;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+
+  .msg-ai {
+    text-align: left;
+    color: var(--text);
+    margin-bottom: 12px;
+  }
+
+  .chat-input {
+    display: flex;
+    gap: 10px;
+  }
+
+  .chat-input input {
+    flex: 1;
+    padding: 12px;
+    border-radius: var(--radius);
+    border: none;
+    background: rgba(255,255,255,0.08);
+    color: white;
+  }
+
+  .chat-input button {
+    padding: 12px 20px;
+    border-radius: var(--radius);
+    border: none;
+    background: linear-gradient(120deg, var(--gold), #e1a93f);
+    cursor: pointer;
+    font-weight: bold;
+  }
+
+  /* FUNÇÕES BLOQUEADAS */
+  .locked {
+    opacity: 0.4;
+    position: relative;
+  }
+
+  .locked::after {
+    content: "🔒 Função disponível apenas no PRO / PREMIUM";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--gold);
+    font-size: 0.9rem;
+    background: rgba(0,0,0,0.7);
+    padding: 6px 14px;
+    border-radius: 10px;
+    border: 1px solid var(--gold-soft);
+  }
+
+  .upgrade-btn {
+    margin-top: 12px;
+    padding: 12px;
+    border-radius: 999px;
+    background: var(--gold);
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    width: 100%;
+    text-align: center;
+    color: #000;
+  }
+
+  .logout {
+    margin-top: 20px;
+    text-align: center;
+    cursor: pointer;
+    color: var(--text-soft);
+    font-size: 0.9rem;
+  }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-
 <body>
 
 <header>
-  <h2>BillionMind Dashboard</h2>
-  <div id="userPlanTag" class="plan-tag">Carregando...</div>
-  <button id="logoutBtn">Sair</button>
+  <div class="logo">BillionMind AI</div>
+  <div id="planBadge" class="plan-badge">Carregando...</div>
 </header>
 
-<div id="lockMessage" style="text-align:center; font-size:1.2rem; margin-top:20px; display:none;">
-  🔒 Este recurso é exclusivo para assinantes PRO e VIP.<br>
-  <a href="/index.html" style="color:#f4c86c; text-decoration:underline;">Atualizar plano</a>
-</div>
+<div class="container">
 
-<div id="contentArea" class="chat-box locked">
-  <textarea id="prompt" placeholder="Digite sua pergunta..."></textarea>
-  <button class="send" onclick="sendMessage()">Enviar</button>
-  <div id="response">Aguardando interação...</div>
-</div>
+  <!-- CHAT LIVRE PARA PLANO GRÁTIS -->
+  <div class="section">
+    <h2>Chat Inteligente</h2>
+    <div id="chatBox" class="chat-box"></div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <div class="chat-input">
+      <input id="chatInput" placeholder="Digite sua mensagem..." />
+      <button onclick="sendMessage()">Enviar</button>
+    </div>
+  </div>
+
+  <!-- FUNÇÕES BLOQUEADAS (PRO/PREMIUM) -->
+  <div class="section locked" id="advancedArea">
+    <h2>Ferramentas Avançadas</h2>
+    <p>Gerador de estratégias, criação automática e painéis premium.</p>
+  </div>
+
+  <button class="upgrade-btn" onclick="upgrade()">
+    Desbloquear Acesso PRO / PREMIUM
+  </button>
+
+  <div class="logout" onclick="logout()">Sair da conta</div>
+
+</div>
 
 <script>
-/* 🔥 1 — CONECTAR SUPABASE */
-const supabase = supabase.createClient(
-  "https://lppjltjoxczooxsbtlyr.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxwcGpsdGpveGN6b294c2J0bHlyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjUwNDY4MTUsImV4cCI6MjA4MDYyMjgxNX0.AK0i5gbTk12z6dgIrNYkFoi6LQMFocSxbi9lka-GZrc"
-);
+  // CONFIG SUPABASE
+  const supabaseUrl = "https://lppjltjoxczooxsbtlyr.supabase.co";
+  const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxwcGpsdGpveGN6b294c2J0bHlyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjUwNDY4MTUsImV4cCI6MjA4MDYyMjgxNX0.AK0i5gbTk12z6dgIrNYkFoi6LQMFocSxbi9lka-GZrc"; // Não coloque a secret aqui!!!
+  const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
-/* 🔥 2 — VERIFICAR LOGIN */
-async function checkLogin() {
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) {
-    window.location.href = "/login.html";
-    return;
+  let currentUser = null;
+
+  // Verifica login ao entrar
+  async function loadUser() {
+    const { data } = await supabaseClient.auth.getUser();
+    if (!data.user) {
+      window.location.href = "login.html";
+      return;
+    }
+    currentUser = data.user;
+    await loadPlan();
   }
 
-  loadUserPlan(user.id);
-}
-checkLogin();
+  // Carrega o plano do usuário
+  async function loadPlan() {
+    const { data, error } = await supabaseClient
+      .from("profiles")
+      .select("plan")
+      .eq("id", currentUser.id)
+      .single();
 
-/* 🔥 3 — CARREGAR PLANO DO USUÁRIO */
-async function loadUserPlan(userId) {
-  const { data, error } = await supabase
-    .from("profiles")
-    .select("plan")
-    .eq("id", userId)
-    .single();
+    let badge = document.getElementById("planBadge");
 
-  const tag = document.getElementById("userPlanTag");
-  const content = document.getElementById("contentArea");
-  const lockMsg = document.getElementById("lockMessage");
+    if (!data || !data.plan) {
+      badge.textContent = "Plano: Free";
+      return;
+    }
 
-  if (error || !data) {
-    tag.textContent = "Plano não encontrado";
-    return;
+    badge.textContent = "Plano: " + data.plan.toUpperCase();
+
+    if (data.plan === "pro" || data.plan === "premium") {
+      document.getElementById("advancedArea").classList.remove("locked");
+    }
   }
 
-  const plan = data.plan;
+  // Enviar mensagem para API
+  async function sendMessage() {
+    let input = document.getElementById("chatInput");
+    let msg = input.value.trim();
+    if (!msg) return;
 
-  tag.textContent = plan.toUpperCase();
+    let box = document.getElementById("chatBox");
 
-  if (plan === "free") {
-    content.classList.add("locked");
-    lockMsg.style.display = "block";
-  } else {
-    content.classList.remove("locked");
-    lockMsg.style.display = "none";
+    box.innerHTML += `<div class='msg-user'>Você: ${msg}</div>`;
+    input.value = "";
+
+    const response = await fetch("/api/chat", {
+      method: "POST",
+      body: JSON.stringify({ message: msg }),
+    });
+
+    const data = await response.json();
+
+    box.innerHTML += `<div class='msg-ai'>AI: ${data.reply}</div>`;
+    box.scrollTop = box.scrollHeight;
   }
-}
 
-/* 🔥 4 — LOGOUT */
-document.getElementById("logoutBtn").onclick = async () => {
-  await supabase.auth.signOut();
-  window.location.href = "/login.html";
-};
-
-/* 🔥 5 — CHAT IA */
-async function sendMessage() {
-  const prompt = document.getElementById("prompt").value;
-  const output = document.getElementById("response");
-
-  if (!prompt.trim()) return;
-
-  output.textContent = "Processando...";
-
-  const response = await fetch("https://api.openai.com/v1/chat/completions", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-
-      /* 
-         ⚠️⚠️⚠️ AQUI VOCÊ COLOCA SUA CHAVE DE API DA IA ⚠️⚠️⚠️
-         SUBSTITUA O TEXTO ABAIXO PELO SEU TOKEN VERDADEIRO 
-      */
-
-      "Authorization": "Bearer SUA API AQUI"
-    },
-    body: JSON.stringify({
-      model: "gpt-4o-mini",
-      messages: [
-        { role: "system", content: "Você é o assistente oficial BillionMind." },
-        { role: "user", content: prompt }
-      ]
-    })
-  });
-
-  const data = await response.json();
-
-  if (data?.choices?.length > 0) {
-    output.textContent = data.choices[0].message.content;
-  } else {
-    output.textContent = "Erro ao gerar resposta.";
+  function upgrade() {
+    window.location.href = "https://pay.cakto.com.br/4ehcq2y_672236";
   }
-}
+
+  async function logout() {
+    await supabaseClient.auth.signOut();
+    window.location.href = "login.html";
+  }
+
+  loadUser();
 </script>
 
 </body>
