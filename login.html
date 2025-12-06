@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login • BillionMind</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, sans-serif;
+      background: #0b0c14;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: white;
+    }
+
+    .box {
+      background: rgba(255,255,255,0.05);
+      padding: 28px;
+      border-radius: 18px;
+      width: 330px;
+      box-shadow: 0 0 25px rgba(0,0,0,0.4);
+      text-align: center;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      margin-top: 10px;
+      background: rgba(255,255,255,0.1);
+      color: white;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      background: #f4c86c;
+      color: black;
+      font-weight: bold;
+      margin-top: 14px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #ffdd89;
+    }
+
+    .google-btn {
+      background: white;
+      color: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      font-weight: 600;
+    }
+
+    .google-btn img {
+      width: 20px;
+    }
+
+    small {
+      opacity: 0.7;
+      display: block;
+      margin-top: 12px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="box">
+  <h2>BillionMind • Login</h2>
+
+  <input id="email" type="email" placeholder="Seu e-mail">
+  <input id="senha" type="password" placeholder="Sua senha">
+
+  <button onclick="loginEmail()">Entrar</button>
+  <button onclick="signupEmail()">Criar conta</button>
+
+  <button class="google-btn" onclick="loginGoogle()">
+    <img src="https://www.svgrepo.com/show/475656/google-color.svg">
+    Entrar com Google
+  </button>
+
+  <small>Login seguro via Supabase</small>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const supabase = supabase.createClient(
+    "SEU_SUPABASE_URL",
+    "SEU_SUPABASE_ANON_KEY"
+  );
+
+  async function loginEmail() {
+    const email = document.getElementById("email").value;
+    const senha = document.getElementById("senha").value;
+
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: email,
+      password: senha
+    });
+
+    if (error) {
+      alert("Erro: " + error.message);
+      return;
+    }
+
+    window.location.href = "index.html"; // redireciona para o app
+  }
+
+  async function signupEmail() {
+    const email = document.getElementById("email").value;
+    const senha = document.getElementById("senha").value;
+
+    const { data, error } = await supabase.auth.signUp({
+      email: email,
+      password: senha
+    });
+
+    if (error) {
+      alert("Erro: " + error.message);
+      return;
+    }
+
+    alert("Conta criada! Verifique seu e-mail.");
+  }
+
+  async function loginGoogle() {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: window.location.origin + "/index.html"
+      }
+    });
+
+    if (error) alert("Erro ao entrar com Google: " + error.message);
+  }
+</script>
+
+</body>
+</html>
