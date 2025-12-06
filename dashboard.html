@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>BillionMind • Dashboard</title>
+
+<style>
+  body {
+    margin: 0;
+    font-family: system-ui, sans-serif;
+    background: #020308;
+    color: white;
+    display: flex;
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: 240px;
+    height: 100vh;
+    background: rgba(255,255,255,0.03);
+    border-right: 1px solid rgba(255,255,255,0.08);
+    backdrop-filter: blur(4px);
+    padding: 24px 16px;
+    position: fixed;
+    top: 0; left: 0;
+  }
+
+  .logo {
+    font-size: 1.5rem;
+    color: #f4c86c;
+    margin-bottom: 24px;
+    text-align: center;
+    font-weight: bold;
+  }
+
+  .menu-item {
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    transition: 0.2s;
+  }
+
+  .menu-item:hover {
+    background: rgba(244,200,108,0.1);
+  }
+
+  .menu-item.active {
+    background: rgba(244,200,108,0.25);
+    border: 1px solid rgba(244,200,108,0.4);
+  }
+
+  /* CONTEÚDO PRINCIPAL */
+  .main {
+    margin-left: 260px;
+    padding: 28px;
+    width: calc(100% - 260px);
+  }
+
+  .section {
+    display: none;
+  }
+  .section.active {
+    display: block;
+  }
+
+  .title {
+    font-size: 1.8rem;
+    color: #f4c86c;
+    margin-bottom: 12px;
+  }
+
+  .blocked {
+    opacity: 0.4;
+    pointer-events: none;
+  }
+
+  .plan-badge {
+    padding: 6px 12px;
+    border-radius: 8px;
+    background: rgba(244,200,108,0.15);
+    border: 1px solid rgba(244,200,108,0.3);
+    display: inline-block;
+    margin-bottom: 20px;
+  }
+
+  .upgrade {
+    padding: 14px 18px;
+    margin-top: 20px;
+    display: inline-block;
+    border-radius: 999px;
+    background: linear-gradient(120deg, #f4c86c, #e1a93f);
+    color: #000;
+    font-weight: bold;
+    cursor: pointer;
+  }
+</style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="logo">BillionMind</div>
+
+  <div class="menu-item active" onclick="showSection('home')">🏠 Início</div>
+  <div class="menu-item" onclick="showSection('mindset')">🧠 Mentalidade</div>
+  <div class="menu-item" onclick="showSection('creator')">⚙️ Criador de Páginas</div>
+  <div class="menu-item" onclick="showSection('ai')">🤖 IA Assistente</div>
+  <div class="menu-item" onclick="showSection('discipline')">📅 Disciplina 2026+</div>
+
+  <div class="menu-item" onclick="logout()" style="margin-top:40px; color:#ff6b6b;">
+    🚪 Sair
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main">
+  <div id="planArea"></div>
+
+  <div id="home" class="section active">
+    <div class="title">Bem-vindo ao BillionMind</div>
+    <p>Escolha uma área ao lado para começar.</p>
+  </div>
+
+  <div id="mindset" class="section">
+    <div class="title">Mentalidade</div>
+    <p>Conteúdos para reforçar sua evolução interna e foco.</p>
+  </div>
+
+  <div id="creator" class="section">
+    <div class="title">Criador de Páginas</div>
+    <p>Ferramenta para gerar páginas profissionais com IA.</p>
+  </div>
+
+  <div id="ai" class="section">
+    <div class="title">IA Assistente</div>
+    <p>Construa ideias, textos e insights com IA integrada.</p>
+  </div>
+
+  <div id="discipline" class="section">
+    <div class="title">Disciplina 2026+</div>
+    <p>Sistema para manter rotina e evolução diária.</p>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const supabase = supabase.createClient(
+    "https://lppjltjoxczooxsbtlyr.supabase.co",
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxwcGpsdGpveGN6b294c2J0bHlyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjUwNDY4MTUsImV4cCI6MjA4MDYyMjgxNX0.AK0i5gbTk12z6dgIrNYkFoi6LQMFocSxbi9lka-GZrc"
+  );
+
+  // Alterar seção
+  function showSection(id) {
+    document.querySelectorAll(".section").forEach(sec => sec.classList.remove("active"));
+    document.getElementById(id).classList.add("active");
+
+    document.querySelectorAll(".menu-item").forEach(i => i.classList.remove("active"));
+    event.target.classList.add("active");
+  }
+
+  // Carregar usuário e plano
+  async function loadUser() {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return (window.location.href = "login.html");
+
+    const { data: profile } = await supabase.from("profiles").select("plan").eq("id", user.id).single();
+
+    const plan = profile?.plan || "free";
+
+    document.getElementById("planArea").innerHTML = `
+      <div class="plan-badge">Seu plano: <strong>${plan.toUpperCase()}</strong></div>
+    `;
+
+    applyPlanRules(plan);
+  }
+
+  // Bloquear/desbloquear
+  function applyPlanRules(plan) {
+    if (plan === "free") {
+      document.getElementById("creator").classList.add("blocked");
+      document.getElementById("ai").classList.add("blocked");
+      document.getElementById("discipline").classList.add("blocked");
+
+      document.getElementById("planArea").innerHTML += `
+        <div class="upgrade" onclick="alert('Assinatura será ativada quando Stripe liberar')">
+          Atualizar Plano
+        </div>`;
+    }
+
+    if (plan === "pro") {
+      document.getElementById("discipline").classList.add("blocked");
+      document.getElementById("planArea").innerHTML += `
+        <div class="upgrade" onclick="alert('Upgrade para VIP será ativado quando Stripe liberar')">
+          Atualizar para VIP
+        </div>`;
+    }
+  }
+
+  async function logout() {
+    await supabase.auth.signOut();
+    window.location.href = "login.html";
+  }
+
+  loadUser();
+</script>
+
+</body>
+</html>
