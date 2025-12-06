@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Criar conta • BillionMind</title>
+
+<style>
+  body {
+    margin: 0;
+    font-family: system-ui, sans-serif;
+    background: #020308;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  .card {
+    width: 90%;
+    max-width: 380px;
+    background: rgba(255,255,255,0.05);
+    padding: 28px;
+    border-radius: 16px;
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+
+  h2 {
+    text-align: center;
+    margin-bottom: 18px;
+    color: #f4c86c;
+  }
+
+  input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    margin-bottom: 12px;
+    background: rgba(255,255,255,0.1);
+    color: white;
+  }
+
+  button {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    background: linear-gradient(120deg, #f4c86c, #e1a93f);
+    color: #000;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+
+  a {
+    color: #f4c86c;
+    text-decoration: none;
+    display: block;
+    text-align: center;
+    margin-top: 12px;
+  }
+
+  .error {
+    color: #ff6b6b;
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+    text-align: center;
+  }
+</style>
+</head>
+
+<body>
+
+<div class="card">
+  <h2>Crie sua conta</h2>
+
+  <div id="error" class="error"></div>
+
+  <input type="email" id="email" placeholder="Seu e-mail" />
+  <input type="password" id="password" placeholder="Senha" />
+
+  <button onclick="signUp()">Criar Conta</button>
+
+  <a href="login.html">Já tenho conta</a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const supabase = supabase.createClient(
+    "https://lppjltjoxczooxsbtlyr.supabase.co",
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxwcGpsdGpveGN6b294c2J0bHlyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjUwNDY4MTUsImV4cCI6MjA4MDYyMjgxNX0.AK0i5gbTk12z6dgIrNYkFoi6LQMFocSxbi9lka-GZrc"
+  );
+
+  async function signUp() {
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value.trim();
+    const errorBox = document.getElementById("error");
+
+    if (!email || !password) {
+      errorBox.textContent = "Preencha todos os campos.";
+      return;
+    }
+
+    const { data, error } = await supabase.auth.signUp({ email, password });
+
+    if (error) {
+      errorBox.textContent = error.message;
+      return;
+    }
+
+    // Criar registro do usuário na tabela profiles
+    await supabase.from("profiles").insert([
+      { id: data.user.id, email: email, plan: "free" }
+    ]);
+
+    alert("Conta criada com sucesso!");
+    window.location.href = "login.html";
+  }
+</script>
+</body>
+</html>
