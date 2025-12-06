@@ -10,7 +10,7 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "Mensagem ausente" });
     }
 
-    // Chamada para sua Função do Supabase
+    // Chamada para sua Função do Supabase "chat"
     const resposta = await fetch(
       "https://lppjltjoxczooxsbtlyr.supabase.co/functions/v1/chat",
       {
@@ -27,6 +27,7 @@ export default async function handler(req, res) {
     return res.status(200).json(data);
 
   } catch (error) {
-    return res.status(500).json({ error: "Erro interno", details: error });
+    console.error(error);
+    return res.status(500).json({ error: "Erro interno", details: error.toString() });
   }
 }
