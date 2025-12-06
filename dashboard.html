@@ -73,7 +73,6 @@
     letter-spacing: 0.08em;
   }
 
-  /* CHAT */
   .chat-box {
     width: 100%;
     height: 280px;
@@ -121,7 +120,6 @@
     font-weight: bold;
   }
 
-  /* FUNÇÕES BLOQUEADAS */
   .locked {
     opacity: 0.4;
     position: relative;
@@ -143,7 +141,7 @@
 
   .upgrade-btn {
     margin-top: 12px;
-    padding: 12px;
+    padding: 14px;
     border-radius: 999px;
     background: var(--gold);
     border: none;
@@ -152,6 +150,7 @@
     width: 100%;
     text-align: center;
     color: #000;
+    font-size: 1rem;
   }
 
   .logout {
@@ -185,14 +184,19 @@
     </div>
   </div>
 
-  <!-- FUNÇÕES BLOQUEADAS (PRO/PREMIUM) -->
+  <!-- ÁREA BLOQUEADA PARA PRO/PREMIUM -->
   <div class="section locked" id="advancedArea">
     <h2>Ferramentas Avançadas</h2>
     <p>Gerador de estratégias, criação automática e painéis premium.</p>
   </div>
 
-  <button class="upgrade-btn" onclick="upgrade()">
-    Desbloquear Acesso PRO / PREMIUM
+  <!-- BOTÕES DE UPGRADE -->
+  <button class="upgrade-btn" onclick="window.location.href='https://buy.stripe.com/14AcN5buodjRewI8cQcAo01'">
+    🔓 Desbloquear Plano PRO – R$ 29,98/mês
+  </button>
+
+  <button class="upgrade-btn" onclick="window.location.href='https://buy.stripe.com/cNiaEX1TOfrZ2O08cQcAo02'">
+    🚀 Desbloquear Plano PREMIUM – R$ 39,90/mês
   </button>
 
   <div class="logout" onclick="logout()">Sair da conta</div>
@@ -200,14 +204,12 @@
 </div>
 
 <script>
-  // CONFIG SUPABASE
   const supabaseUrl = "https://lppjltjoxczooxsbtlyr.supabase.co";
-  const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxwcGpsdGpveGN6b294c2J0bHlyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjUwNDY4MTUsImV4cCI6MjA4MDYyMjgxNX0.AK0i5gbTk12z6dgIrNYkFoi6LQMFocSxbi9lka-GZrc"; // Não coloque a secret aqui!!!
+  const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxwcGpsdGpveGN6b294c2J0bHlyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjUwNDY4MTUsImV4cCI6MjA4MDYyMjgxNX0.AK0i5gbTk12z6dgIrNYkFoi6LQMFocSxbi9lka-GZrc"; 
   const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
   let currentUser = null;
 
-  // Verifica login ao entrar
   async function loadUser() {
     const { data } = await supabaseClient.auth.getUser();
     if (!data.user) {
@@ -218,9 +220,8 @@
     await loadPlan();
   }
 
-  // Carrega o plano do usuário
   async function loadPlan() {
-    const { data, error } = await supabaseClient
+    const { data } = await supabaseClient
       .from("profiles")
       .select("plan")
       .eq("id", currentUser.id)
@@ -240,14 +241,12 @@
     }
   }
 
-  // Enviar mensagem para API
   async function sendMessage() {
     let input = document.getElementById("chatInput");
     let msg = input.value.trim();
     if (!msg) return;
 
     let box = document.getElementById("chatBox");
-
     box.innerHTML += `<div class='msg-user'>Você: ${msg}</div>`;
     input.value = "";
 
@@ -257,13 +256,8 @@
     });
 
     const data = await response.json();
-
     box.innerHTML += `<div class='msg-ai'>AI: ${data.reply}</div>`;
     box.scrollTop = box.scrollHeight;
-  }
-
-  function upgrade() {
-    window.location.href = "https://pay.cakto.com.br/4ehcq2y_672236";
   }
 
   async function logout() {
