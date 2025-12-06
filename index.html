@@ -1,144 +1,153 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BillionMind – Login</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>BillionMind – Login</title>
 
-  <style>
-    body {
-      margin: 0;
-      font-family: system-ui, sans-serif;
-      background: radial-gradient(circle at top, #0a0a0f, #000);
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-    }
+<style>
+  body {
+    margin: 0;
+    font-family: system-ui, sans-serif;
+    background: radial-gradient(circle at top, #0a0a0f, #000);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
 
-    .login-box {
-      width: 360px;
-      background: rgba(255,255,255,0.04);
-      padding: 30px;
-      border-radius: 16px;
-      box-shadow: 0 0 40px rgba(0,0,0,0.6);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255,255,255,0.08);
-      animation: fade 0.6s ease;
-    }
+  .login-box {
+    width: 360px;
+    background: rgba(255,255,255,0.04);
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 0 40px rgba(0,0,0,0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.08);
+    animation: fade 0.6s ease;
+  }
 
-    @keyframes fade {
-      from {opacity: 0; transform: translateY(8px);}
-      to {opacity: 1; transform: translateY(0);}
-    }
+  @keyframes fade {
+    from {opacity: 0; transform: translateY(8px);}
+    to {opacity: 1; transform: translateY(0);}
+  }
 
-    h1 {
-      text-align: center;
-      margin-bottom: 20px;
-      font-size: 1.6rem;
-      letter-spacing: 0.05em;
-      color: #f4c86c;
-    }
+  h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1.6rem;
+    letter-spacing: 0.05em;
+    color: #f4c86c;
+  }
 
-    input {
-      width: 100%;
-      padding: 12px;
-      margin-bottom: 14px;
-      border: none;
-      border-radius: 8px;
-      outline: none;
-      background: rgba(255,255,255,0.08);
-      color: white;
-      font-size: 1rem;
-    }
+  input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 14px;
+    border: none;
+    border-radius: 8px;
+    outline: none;
+    background: rgba(255,255,255,0.08);
+    color: white;
+    font-size: 1rem;
+  }
 
-    button {
-      width: 100%;
-      padding: 12px;
-      background: linear-gradient(120deg, #f4c86c, #e1a93f);
-      border: none;
-      border-radius: 999px;
-      cursor: pointer;
-      font-size: 1.1rem;
-      font-weight: bold;
-      color: black;
-      margin-top: 10px;
-      transition: 0.2s;
-    }
+  button {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(120deg, #f4c86c, #e1a93f);
+    border: none;
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: black;
+    margin-top: 10px;
+    transition: 0.2s;
+  }
 
-    button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(244,200,108,0.4);
-    }
+  button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(244,200,108,0.4);
+  }
 
-    .link {
-      text-align: center;
-      margin-top: 10px;
-      font-size: 0.9rem;
-      color: #bbb;
-      cursor: pointer;
-    }
+  .link {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 0.9rem;
+    color: #bbb;
+    cursor: pointer;
+  }
 
-    .plan-buttons {
-      margin-top: 25px;
-    }
+  .plan-buttons {
+    margin-top: 25px;
+  }
 
-    .plan-btn {
-      width: 100%;
-      margin-top: 12px;
-      padding: 10px;
-      border-radius: 8px;
-      text-align: center;
-      font-size: 0.95rem;
-      font-weight: bold;
-      background: rgba(244,200,108,0.12);
-      border: 1px solid rgba(244,200,108,0.4);
-      cursor: pointer;
-      transition: .2s;
-    }
+  .plan-btn {
+    width: 100%;
+    margin-top: 12px;
+    padding: 10px;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 0.95rem;
+    font-weight: bold;
+    background: rgba(244,200,108,0.12);
+    border: 1px solid rgba(244,200,108,0.4);
+    cursor: pointer;
+    transition: .2s;
+  }
 
-    .plan-btn:hover {
-      background: rgba(244,200,108,0.2);
-    }
+  .plan-btn:hover {
+    background: rgba(244,200,108,0.2);
+  }
+</style>
 
-  </style>
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
+
 <body>
 
 <div class="login-box">
   <h1>BillionMind Login</h1>
 
-  <input id="email" type="email" placeholder="Seu e-mail">
-  <input id="password" type="password" placeholder="Sua senha">
+  <input id="email" type="email" placeholder="Seu e-mail" />
+  <input id="password" type="password" placeholder="Sua senha" />
 
   <button onclick="login()">Entrar</button>
 
-  <p class="link" onclick="signup()">Criar conta</p>
+  <p class="link" onclick="goSignup()">Criar conta</p>
 
+  <!-- PLANOS -->
   <div class="plan-buttons">
-    <div class="plan-btn" onclick="window.location.href='https://buy.stripe.com/cNiaEX1TOfrZ2O08cQcAo02'">
-      Assinar Premium – R$ 39,90
+
+    <div class="plan-btn"
+      onclick="window.location.href='https://buy.stripe.com/cNiaEX1TOfrZ2O08cQcAo02'">
+      Assinar PREMIUM – R$ 39,90
     </div>
 
-    <div class="plan-btn" onclick="window.location.href='https://buy.stripe.com/14AcN5buodjRewI8cQcAo01'">
+    <div class="plan-btn"
+      onclick="window.location.href='https://buy.stripe.com/14AcN5buodjRewI8cQcAo01'">
       Assinar PRO – R$ 29,98
     </div>
+
+    <div class="plan-btn" onclick="window.location.href='dashboard.html'">
+      Entrar como PLANO GRÁTIS
+    </div>
+
   </div>
 </div>
 
 <script>
   const supabaseUrl = "https://lppjltjoxczooxsbtlyr.supabase.co";
-  const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxwcGpsdGpveGN6b294c2J0bHlyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjUwNDY4MTUsImV4cCI6MjA4MDYyMjgxNX0.AK0i5gbTk12z6dgIrNYkFoi6LQMFocSxbi9lka-GZrc";
+  const supabaseKey = 
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxwcGpsdGpveGN6b294c2J0bHlyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjUwNDY4MTUsImV4cCI6MjA4MDYyMjgxNX0.AK0i5gbTk12z6dgIrNYkFoi6LQMFocSxbi9lka-GZrc";
 
   const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
   async function login() {
     const email = document.getElementById("email").value;
-    const pass = document.getElementById("password").value;
+    const pass  = document.getElementById("password").value;
 
     const { data, error } = await supabaseClient.auth.signInWithPassword({
       email: email,
@@ -147,25 +156,14 @@
 
     if (error) {
       alert("Erro ao entrar: " + error.message);
-    } else {
-      window.location.href = "dashboard.html";
+      return;
     }
+
+    window.location.href = "dashboard.html";
   }
 
-  async function signup() {
-    const email = document.getElementById("email").value;
-    const pass = document.getElementById("password").value;
-
-    const { data, error } = await supabaseClient.auth.signUp({
-      email: email,
-      password: pass
-    });
-
-    if (error) {
-      alert("Erro ao criar conta: " + error.message);
-    } else {
-      alert("Conta criada com sucesso! Agora faça login.");
-    }
+  function goSignup() {
+    window.location.href = "signup.html";
   }
 </script>
 
