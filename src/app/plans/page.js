@@ -1,159 +1,121 @@
-"use client";
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>BillionMind – Planos</title>
 
-export default function Plans() {
-  return (
-    <div style={container}>
-      <div style={card}>
-        <h2 style={title}>Escolha seu plano</h2>
+<style>
+  body {
+    margin: 0;
+    background: #0a0a0c;
+    color: #ffffff;
+    font-family: Arial, sans-serif;
+  }
 
-        <p style={subtitle}>
-          Libere todo o poder do BillionMind e desbloqueie funções avançadas.
-        </p>
+  .container {
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    min-height: 100vh;
+  }
 
-        {/* PLANO PRO */}
-        <div style={planBox}>
-          <h3 style={planTitle}>BillionMind PRO</h3>
-          <p style={price}>R$ 29,98 / mês</p>
-          <p style={desc}>
-            • Funções extras<br />• Mais processamento<br />• IA mais rápida
-          </p>
+  h1 {
+    text-align: center;
+    font-size: 28px;
+    font-weight: 800;
+    margin-bottom: 10px;
+  }
 
-          <a
-            style={btn}
-            href="https://buy.stripe.com/14AcN5buodjRewI8cQcAo01"
-          >
-            Assinar PRO
-          </a>
-        </div>
+  p.subtitle {
+    text-align: center;
+    font-size: 16px;
+    opacity: 0.8;
+    margin-bottom: 30px;
+  }
 
-        {/* PLANO PREMIUM */}
-        <div style={planBoxPremium}>
-          <h3 style={planTitle}>BillionMind PREMIUM</h3>
-          <p style={price}>R$ 39,90 / mês</p>
-          <p style={desc}>
-            • Tudo do PRO<br />
-            • Ferramentas avançadas<br />
-            • Prioridade máxima<br />
-            • Experiência 100%
-          </p>
+  .plan-box {
+    background: #111116;
+    border-radius: 16px;
+    padding: 22px;
+    margin-bottom: 25px;
+    box-shadow: 0 0 18px rgba(255, 255, 255, 0.05);
+  }
 
-          <a
-            style={btnPremium}
-            href="https://buy.stripe.com/cNiaEX1TOfrZ2O08cQcAo02"
-          >
-            Assinar PREMIUM
-          </a>
-        </div>
+  .plan-title {
+    font-size: 22px;
+    font-weight: 700;
+  }
 
-        <a href="/dashboard" style={backLink}>
-          Voltar ao Dashboard
-        </a>
-      </div>
-    </div>
-  );
-}
+  .price {
+    font-size: 20px;
+    margin: 8px 0 18px;
+    color: #f4c86c;
+    font-weight: 700;
+  }
 
-/* Estilos */
+  .features {
+    font-size: 14px;
+    line-height: 22px;
+    margin-bottom: 20px;
+  }
 
-const container = {
-  background: "#020308",
-  minHeight: "100vh",
-  display: "flex",
-  justifyContent: "center",
-  paddingTop: "60px",
-  fontFamily: "system-ui",
-};
+  .btn {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 12px 0;
+    background: #f4c86c;
+    color: #000000;
+    border-radius: 10px;
+    font-weight: 700;
+    text-decoration: none;
+    font-size: 16px;
+  }
+</style>
+</head>
 
-const card = {
-  width: "92%",
-  maxWidth: "440px",
-  padding: "26px",
-  borderRadius: "18px",
-  background: "rgba(255,255,255,0.05)",
-  border: "1px solid rgba(255,255,255,0.1)",
-  color: "#fff",
-  backdropFilter: "blur(10px)",
-};
+<body>
 
-const title = {
-  textAlign: "center",
-  color: "#f4c86c",
-  marginBottom: "6px",
-  fontSize: "1.4rem",
-};
+<div class="container">
 
-const subtitle = {
-  textAlign: "center",
-  color: "#ccc",
-  marginBottom: "20px",
-};
+  <h1>Escolha seu plano</h1>
+  <p class="subtitle">Libere todo o poder do BillionMind e desbloqueie funções avançadas.</p>
 
-const planBox = {
-  background: "rgba(255,255,255,0.04)",
-  padding: "18px",
-  borderRadius: "14px",
-  marginBottom: "20px",
-  border: "1px solid rgba(255,255,255,0.1)",
-};
+  <!-- PLANO PRO -->
+  <div class="plan-box">
+    <h3 class="plan-title">BillionMind PRO</h3>
+    <p class="price">R$ 29,98 / mês</p>
 
-const planBoxPremium = {
-  background: "rgba(244,200,108,0.10)",
-  padding: "18px",
-  borderRadius: "14px",
-  marginBottom: "20px",
-  border: "1px solid rgba(244,200,108,0.5)",
-};
+    <p class="features">
+      ✓ Funções extras<br>
+      ✓ Mais processamento<br>
+      ✓ IA mais rápida
+    </p>
 
-const planTitle = {
-  fontSize: "1.2rem",
-  color: "#fff",
-  marginBottom: "6px",
-};
+    <a class="btn" href="https://buy.stripe.com/14AcN5buodjRewI8cQcAo01">
+      Assinar PRO
+    </a>
+  </div>
 
-const price = {
-  fontSize: "1.1rem",
-  color: "#f4c86c",
-  fontWeight: "bold",
-  marginBottom: "8px",
-};
+  <!-- PLANO PREMIUM -->
+  <div class="plan-box">
+    <h3 class="plan-title">BillionMind PREMIUM</h3>
+    <p class="price">R$ 39,90 / mês</p>
 
-const desc = {
-  fontSize: "0.9rem",
-  color: "#ddd",
-  marginBottom: "12px",
-  lineHeight: "1.4em",
-};
+    <p class="features">
+      ✓ Tudo do PRO<br>
+      ✓ Maior limite diário<br>
+      ✓ Respostas mais rápidas<br>
+      ✓ Prioridade total
+    </p>
 
-const btn = {
-  width: "100%",
-  display: "block",
-  background: "#f4c86c",
-  padding: "12px",
-  borderRadius: "10px",
-  textAlign: "center",
-  textDecoration: "none",
-  color: "#000",
-  fontWeight: "bold",
-  marginTop: "10px",
-};
+    <a class="btn" href="https://buy.stripe.com/cNiaEX1TOfrZ2O08cQcAo02">
+      Assinar PREMIUM
+    </a>
+  </div>
 
-const btnPremium = {
-  width: "100%",
-  display: "block",
-  background: "linear-gradient(120deg,#f4c86c,#d9a63f)",
-  padding: "12px",
-  borderRadius: "10px",
-  textAlign: "center",
-  textDecoration: "none",
-  color: "#000",
-  fontWeight: "bold",
-  marginTop: "10px",
-};
+</div>
 
-const backLink = {
-  display: "block",
-  textAlign: "center",
-  marginTop: "20px",
-  color: "#ccc",
-  textDecoration: "none",
-};
+</body>
+</html>
